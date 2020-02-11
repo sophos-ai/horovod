@@ -1,12 +1,14 @@
 FROM nvidia/cuda:10.0-devel-ubuntu18.04
 
+ARG AWS_DEFAULT_REGION
+ARG AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+
 # TensorFlow version is tightly coupled to CUDA and cuDNN so it should be selected carefully
 ENV TENSORFLOW_VERSION=1.14.0
 ENV CUDNN_VERSION=7.6.0.64-1+cuda10.0
 ENV NCCL_VERSION=2.4.7-1+cuda10.0
 
-# Python 2.7 or 3.6 is supported by Ubuntu Bionic out of the box
-ARG python=2.7
+ARG python=3.7
 ENV PYTHON_VERSION=${python}
 
 # Set default shell to /bin/bash
@@ -75,9 +77,4 @@ RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_confi
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
-# Download examples
-RUN apt-get install -y --no-install-recommends subversion && \
-    svn checkout https://github.com/horovod/horovod/trunk/examples && \
-    rm -rf /examples/.svn
-
-WORKDIR "/examples"
+WORKDIR "/"
