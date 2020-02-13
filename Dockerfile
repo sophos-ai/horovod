@@ -37,7 +37,8 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
 RUN if [[ "${PYTHON_VERSION}" == "3.7" ]]; then \
         apt-get install -y python${PYTHON_VERSION}-distutils; \
     fi
-RUN ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python
+RUN ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python && \
+    ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
