@@ -10,9 +10,7 @@ function build_one()
     docker build -t ${tag} --build-arg python=${py} --no-cache .
     horovod_version=$(docker run ${tag} pip freeze | grep ^horovod= | awk -F== '{print $2}')
     tensorflow_version=$(docker run ${tag} pip freeze | grep ^tensorflow-gpu= | awk -F== '{print $2}')
-    pytorch_version=$(docker run ${tag} pip freeze | grep ^torch= | awk -F== '{print $2}' | awk -F+ '{print $1}')
-    mxnet_version=$(docker run ${tag} pip freeze | grep ^mxnet | awk -F== '{print $2}')
-    final_tag=horovod/horovod:${horovod_version}-tf${tensorflow_version}-torch${pytorch_version}-mxnet${mxnet_version}-py${py}
+    final_tag=459806747212.dkr.ecr.us-east-1.amazonaws.com/horovod:${horovod_version}-tf${tensorflow_version}-py${py}
     docker tag ${tag} ${final_tag}
     docker rmi ${tag}
 }
@@ -20,9 +18,8 @@ function build_one()
 # clear upstream image, ok to fail if image does not exist
 docker rmi $(cat Dockerfile | grep FROM | awk '{print $2}') || true
 
-# build for py2 and py3
-build_one 2.7
-build_one 3.6
+# build for py3
+build_one 3.7
 
 # print recent images
-docker images horovod/horovod
+docker images 459806747212.dkr.ecr.us-east-1.amazonaws.com/horovod
